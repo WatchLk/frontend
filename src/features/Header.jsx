@@ -10,15 +10,31 @@ import {
 import SearchBar from "./SearchBar";
 import { LiaShoppingBagSolid, LiaUser } from "react-icons/lia";
 import { ChevronDown } from "lucide-react";
+import SearchResultSection from "./SearchResultSection";
+import { useState } from "react";
 
 const Header = () => {
+  const [value, setValue] = useState("");
+  const [result, setResult] = useState([]);
+  const [loading, setLoading] = useState(false);
   return (
     <header className="bg-white">
       <div className="flex items-center justify-between p-5 px-10 max-w-7xl m-auto">
         <div>
           <h1 className="text-3xl md:text-4xl font-bold">Watch.Lk</h1>
         </div>
-        <div className="hidden md:block"><SearchBar /></div>
+        <div className="hidden md:block relative">
+          <SearchBar
+            setResult={setResult}
+            setLoading={setLoading}
+            setValue={setValue}
+          />
+          <SearchResultSection
+            result={result}
+            loading={loading}
+            value={value}
+          />
+        </div>
         <div className="flex items-center gap-4">
           <div>
             <LiaShoppingBagSolid size={24} />

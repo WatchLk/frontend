@@ -23,12 +23,12 @@ const CategorySection = () => {
   ];
   return (
     <div className="max-w-7xl m-auto mt-2 md:mt-4">
-      <div className="grid max-h-screen md:grid-cols-2 md:grid-rows-2 lg:grid-cols-4 gap-8">
+      <div className="grid max-h-screen min-h-fit md:grid-cols-2 md:grid-rows-2 lg:grid-cols-4 gap-4 md:gap-8">
         {categories.map((category, index) => {
           return (
             <Link
               key={index}
-              className={`relative rounded-2xl flex overflow-hidden group
+              className={`relative rounded-4xl flex overflow-hidden group
                 ${
                   index === 0
                     ? "md:col-span-1 md:row-span-1 lg:col-span-2 lg:row-span-2"
