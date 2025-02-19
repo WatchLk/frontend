@@ -12,7 +12,7 @@ const ProductCard = ({ product }) => {
           alt={product.name}
           className="w-full object-cover"
         />
-        <Button className="lg:hidden lg:group-hover:flex absolute top-2 right-2 lg:top-4 lg:right-4 bg-white transition-all" variant="primary" size="icon">
+        <Button className="lg:hidden lg:group-hover:flex absolute top-2 right-2 lg:top-4 lg:right-4 bg-white transition-all" variant="ghost" size="icon">
           <LiaShoppingBagSolid className="" />
         </Button>
       </div>

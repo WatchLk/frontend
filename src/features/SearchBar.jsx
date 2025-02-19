@@ -50,7 +50,7 @@ const SearchBar = ({ setResult, setLoading, setValue }) => {
       </select> */}
       <input
         type="text"
-        className="focus:outline-hidden placeholder:text-sm ps-1 lg:min-w-[250px]"
+        className="focus:outline-hidden placeholder:text-sm ps-1 grow lg:min-w-[250px]"
         name="search"
         placeholder="Search here..."
         autoComplete="off"

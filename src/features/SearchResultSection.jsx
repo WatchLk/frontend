@@ -6,7 +6,7 @@ const SearchResultSection = ({ result, loading, value }) => {
   return (
     <>
       {((loading && result && result.length > 0) || value !== "") && (
-        <div className="absolute bg-white mt-2 flex flex-col w-full shadow rounded-2xl z-20 p-1">
+        <div className="absolute bg-white mt-2 flex flex-col w-full max-h-80 overflow-y-scroll shadow z-20 p-1">
           {loading && (
             <div className="flex items-center gap-2 justify-center p-2">
               <LiaSpinnerSolid className="animate-spin" />
