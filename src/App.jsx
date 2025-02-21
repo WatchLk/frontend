@@ -4,6 +4,7 @@ import Header from "./features/Header";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
@@ -11,11 +12,12 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/auth/signin" element={<SignIn />} />
+        <Route path="/auth/signup" element={<SignUp />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       <Footer />
+      <Toaster reverseOrder={false} />
     </BrowserRouter>
   );
 }

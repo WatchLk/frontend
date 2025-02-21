@@ -9,7 +9,6 @@ const SearchBar = ({ setResult, setLoading, setValue }) => {
 
   useEffect(
     function onSearchValuehange() {
-      console.log(searchValue);
       setValue(searchValue);
       getResult();
     },

@@ -5,9 +5,13 @@ import {
   validatePassword,
 } from "@/lib/validators";
 import { Eye, EyeClosed } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { LiaSpinnerSolid } from "react-icons/lia";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { resetSignUpStatus, signUpAsync } from "@/state/authSlice/authSlice";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [firstnameError, setFirstnameError] = useState(null);
@@ -22,7 +26,18 @@ const SignUp = () => {
     password: "",
   });
 
-  const handleSubmit = (e) => {
+  const { signUpStatus, error } = useSelector((state) => state.auth);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetSignUpStatus());
+    };
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setFirstnameError(null);
     setLastnameError(null);
@@ -43,14 +58,17 @@ const SignUp = () => {
       return;
     }
 
-    alert(JSON.stringify(formdata));
-    setFormdata({
-      firstname: "",
-      lastname: "",
-      email: "",
-      password: "",
-    });
+    dispatch(signUpAsync(formdata));
   };
+
+  useEffect(() => {
+    if (signUpStatus === "fulfilled") {
+      toast.success("Registration successful");
+      navigate("/auth/signin");
+    } else if (signUpStatus === "rejected") {
+      toast.error(error);
+    }
+  }, [signUpStatus, navigate, error]);
 
   return (
     <div className="min-h-fit my-16 lg:my-12 flex justify-center max-w-7xl m-auto">
@@ -76,6 +94,12 @@ const SignUp = () => {
                   setFormdata({ ...formdata, firstname: e.target.value });
                   setFirstnameError(validateName(e.target.value, 1));
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleSubmit(e);
+                  }
+                }}
               />
               {firstnameError && (
                 <span className="text-red-500 text-sm ms-5">
@@ -97,6 +121,12 @@ const SignUp = () => {
                 onChange={(e) => {
                   setFormdata({ ...formdata, lastname: e.target.value });
                   setLastnameError(validateName(e.target.value, 2));
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleSubmit(e);
+                  }
                 }}
               />
               {lastnameError && (
@@ -120,6 +150,12 @@ const SignUp = () => {
                   setFormdata({ ...formdata, email: e.target.value });
                   setEmailError(validateEmail(e.target.value));
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleSubmit(e);
+                  }
+                }}
               />
               {emailError && (
                 <span className="text-red-500 text-sm ms-5">{emailError}</span>
@@ -141,6 +177,12 @@ const SignUp = () => {
                     setFormdata({ ...formdata, password: e.target.value });
                     setPasswordError(validatePassword(e.target.value));
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleSubmit(e);
+                    }
+                  }}
                 />
                 {passwordError && (
                   <span className="text-red-500 text-sm ms-5">
@@ -161,8 +203,15 @@ const SignUp = () => {
                 </Button>
               </div>
             </div>
-            <Button type="submit" className="!p-6 rounded-full mt-2">
-              Register
+            <Button
+              type="submit"
+              className="!p-6 rounded-full mt-2"
+              disabled={signUpStatus === "pending"}
+            >
+              {signUpStatus === "pending" && (
+                <LiaSpinnerSolid className="animate-spin size-5" />
+              )}
+              <span>Register</span>
             </Button>
           </form>
         </div>
@@ -180,7 +229,7 @@ const SignUp = () => {
         </Button>
         <div className="flex gap-1 justify-center">
           <span className="text-gray-600">Already have an account?</span>
-          <Link to={"/sign-in"} className="underline">
+          <Link to={"/auth/signin"} className="underline">
             Sign in
           </Link>
         </div>

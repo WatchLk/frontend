@@ -1,9 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { validateEmail, validatePassword } from "@/lib/validators";
+import { validateEmail } from "@/lib/validators";
 import { Eye, EyeClosed } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { LiaSpinnerSolid } from "react-icons/lia";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { resetSignInStatus, signInAsync } from "@/state/authSlice/authSlice";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,6 +18,16 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+  const dispatch = useDispatch();
+  const { signInStatus, error } = useSelector((state) => state.auth);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetSignInStatus());
+    };
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,7 +35,8 @@ const SignIn = () => {
     setPasswordError(null);
 
     const emailError = validateEmail(formdata.email);
-    const passwordError = validatePassword(formdata.password);
+    const passwordError =
+      formdata.password === "" ? "Password is required!" : null;
 
     if (emailError && passwordError) {
       setEmailError(emailError);
@@ -33,12 +48,17 @@ const SignIn = () => {
       return setPasswordError(passwordError);
     }
 
-    alert(JSON.stringify(formdata));
-    setFormdata({
-      email: "",
-      password: "",
-    });
+    dispatch(signInAsync(formdata));
   };
+
+  useEffect(() => {
+    if (signInStatus === "fulfilled") {
+      toast.success("Login successful");
+      navigate("/");
+    } else if (signInStatus === "rejected") {
+      toast.error(error);
+    }
+  }, [signInStatus, navigate, error]);
 
   return (
     <div className="min-h-fit my-16 lg:my-12 flex justify-center max-w-7xl m-auto">
@@ -64,6 +84,12 @@ const SignIn = () => {
                   setFormdata({ ...formdata, email: e.target.value });
                   setEmailError(validateEmail(e.target.value));
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleSubmit(e);
+                  }
+                }}
               />
               {emailError && (
                 <span className="text-red-500 text-sm ms-5">{emailError}</span>
@@ -83,7 +109,17 @@ const SignIn = () => {
                   value={formdata.password}
                   onChange={(e) => {
                     setFormdata({ ...formdata, password: e.target.value });
-                    setPasswordError(validatePassword(e.target.value));
+                    setPasswordError(
+                      e.target.value.length === 0
+                        ? "Password is required!"
+                        : null
+                    );
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleSubmit(e);
+                    }
                   }}
                 />
                 {passwordError && (
@@ -106,8 +142,15 @@ const SignIn = () => {
               </div>
             </div>
             <p className="underline text-end">Forgot password?</p>
-            <Button type="submit" className="!p-6 rounded-full mt-2">
-              Sign in
+            <Button
+              type="submit"
+              className="!p-6 rounded-full mt-2"
+              disabled={signInStatus === "pending"}
+            >
+              {signInStatus === "pending" && (
+                <LiaSpinnerSolid className="animate-spin size-5" />
+              )}
+              <span>Sign in</span>
             </Button>
           </form>
         </div>
@@ -125,7 +168,7 @@ const SignIn = () => {
         </Button>
         <div className="flex gap-1 justify-center">
           <span className="text-gray-600">Don&#39;t have an account?</span>
-          <Link to={"/sign-up"} className="underline">
+          <Link to={"/auth/signup"} className="underline">
             Sign up
           </Link>
         </div>

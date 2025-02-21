@@ -4,60 +4,72 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
 :root {
-  --background: hsl(210 100% 98%);
-  --foreground: hsl(222.2 84% 4.9%);
-  --card: hsl(0 0% 100%);
-  --card-foreground: hsl(222.2 84% 4.9%);
-  --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(222.2 84% 4.9%);
-  --primary: hsl(30 40% 25%); /* Lighter Brown */
-  --primary-foreground: hsl(30 30% 90%); /* Light foreground for contrast */
-  --secondary: hsl(30 40% 85%);
-  --secondary-foreground: hsl(30 40% 25%);
-  --muted: hsl(30 40% 85%);
-  --muted-foreground: hsl(30 30% 40%);
-  --accent: hsl(30 40% 85%);
-  --accent-foreground: hsl(30 40% 25%);
-  --destructive: hsl(0 84.2% 60.2%);
-  --destructive-foreground: hsl(210 40% 98%);
-  --border: hsl(30 30% 85%);
-  --input: hsl(30 30% 85%);
-  --ring: hsl(30 40% 25%); /* Lighter Brown Ring */
-  --chart-1: hsl(30 40% 30%); /* Lighter brown for contrast */
-  --chart-2: hsl(160 60% 45%);
-  --chart-3: hsl(30 80% 55%);
-  --chart-4: hsl(280 65% 60%);
-  --chart-5: hsl(340 75% 55%);
+  --background: #f1f5f9; /* Light slate background */
+  --foreground: #1e293b; /* Darker slate for text */
+  --card: #e2e8f0; /* Soft slate for cards */
+  --card-foreground: #1e293b; /* Dark text on cards */
+  --popover: #fdfeff; /* Popover uses the same color as the card */
+  --popover-foreground: #1e293b; /* Dark text for popovers */
+  --primary: #334155; /* Deep Slate */
+  --primary-foreground: #f8fafc; /* Almost white for text contrast */
+  --primary-hover: #475569; /* Lighter slate for hover effect */
+  --secondary: #64748b; /* Muted slate for secondary elements */
+  --secondary-foreground: #f1f5f9; /* Light slate for contrast */
+  --secondary-hover: #94a3b8; /* Softer slate for hover */
+  --muted: rgba(109, 111, 114, 0.185); /* Slightly darker than secondary */
+  --muted-foreground: #cbd5e1; /* Soft light slate for contrast */
+  --muted-hover: #64748b; /* Lighter slate for muted hover */
+  --accent: #d7dde4; /* Lighter accent for softer effect */
+  --accent-foreground: #1e293b; /* Darker text for better contrast */
+  --accent-hover: #b1c6db; /* Even softer hover effect for accents */
+  --destructive: #b91c1c; /* Bold red for destructive actions */
+  --destructive-foreground: #f8fafc; /* Light text on destructive actions */
+  --destructive-hover: #dc2626; /* Lighter red for destructive hover */
+  --border: #64748b; /* Muted slate for borders */
+  --input: #e2e8f0; /* Light slate for input fields */
+  --ring: #475569; /* Dark slate ring for focus */
+  --chart-1: #334155; /* Primary for chart 1 */
+  --chart-2: #3b536c; /* Slightly brighter slate for chart 2 */
+  --chart-3: #64748b; /* Muted slate for chart 3 */
+  --chart-4: #b1c6db; /* Soft light slate for chart 4 */
+  --chart-5: #94a3b8; /* Lighter slate for chart 5 */
   --radius: 0.6rem;
 }
 
 .dark {
-  --background: hsl(222.2 84% 4.9%);
-  --foreground: hsl(210 100% 98%);
-  --card: hsl(222.2 84% 4.9%);
-  --card-foreground: hsl(210 100% 98%);
-  --popover: hsl(222.2 84% 4.9%);
-  --popover-foreground: hsl(210 100% 98%);
-  --primary: hsl(30 40% 25%); /* Lighter Brown */
-  --primary-foreground: hsl(30 30% 90%); /* Light foreground for contrast */
-  --secondary: hsl(30 40% 20%);
-  --secondary-foreground: hsl(210 100% 98%);
-  --muted: hsl(30 40% 20%);
-  --muted-foreground: hsl(30 30% 60%);
-  --accent: hsl(30 40% 20%);
-  --accent-foreground: hsl(210 100% 98%);
-  --destructive: hsl(0 62.8% 30.6%);
-  --destructive-foreground: hsl(210 100% 98%);
-  --border: hsl(30 40% 20%);
-  --input: hsl(30 40% 20%);
-  --ring: hsl(30 40% 25%); /* Lighter Brown */
-  --chart-1: hsl(30 40% 30%);
-  --chart-2: hsl(160 60% 45%);
-  --chart-3: hsl(30 80% 55%);
-  --chart-4: hsl(280 65% 60%);
-  --chart-5: hsl(340 75% 55%);
+  --background: #1e293b; /* Dark slate background */
+  --foreground: #f8fafc; /* Light text for dark mode */
+  --card: #334155; /* Slightly darker than background */
+  --card-foreground: #f8fafc; /* Light text on dark cards */
+  --popover: #334155; /* Same as card */
+  --popover-foreground: #f8fafc; /* Light text for popovers */
+  --primary: #334155; /* Deep Slate */
+  --primary-foreground: #f8fafc; /* Light text on primary */
+  --primary-hover: #475569; /* Lighter hover for dark primary */
+  --secondary: #475569; /* Slightly muted for secondary elements */
+  --secondary-foreground: #e2e8f0; /* Lighter text for contrast */
+  --secondary-hover: #64748b; /* Softer slate for hover */
+  --muted: #475569; /* Muted color for dark mode */
+  --muted-foreground: #cbd5e1; /* Soft light slate */
+  --muted-hover: #64748b; /* Muted hover effect */
+  --accent: #94a3b8; /* Lighter accent */
+  --accent-foreground: #f8fafc; /* Light text on accents */
+  --accent-hover: #b1c6db; /* Softer hover effect */
+  --destructive: #b91c1c; /* Bold red for destructive actions */
+  --destructive-foreground: #f8fafc; /* Light text on destructive */
+  --destructive-hover: #dc2626; /* Lighter red for destructive hover */
+  --border: #475569; /* Dark slate for borders */
+  --input: #475569; /* Darker input fields */
+  --ring: #3b536c; /* Darker slate ring for focus */
+  --chart-1: #334155; /* Primary for chart 1 */
+  --chart-2: #3b536c; /* Slightly brighter for chart 2 */
+  --chart-3: #64748b; /* Muted slate */
+  --chart-4: #b1c6db; /* Soft light slate */
+  --chart-5: #94a3b8; /* Lighter slate */
 }
+
 
 
 
