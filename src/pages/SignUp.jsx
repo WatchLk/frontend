@@ -26,7 +26,7 @@ const SignUp = () => {
     password: "",
   });
 
-  const { signUpStatus, error } = useSelector((state) => state.auth);
+  const { signUpStatus, authError } = useSelector((state) => state.auth);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -66,9 +66,9 @@ const SignUp = () => {
       toast.success("Registration successful");
       navigate("/auth/signin");
     } else if (signUpStatus === "rejected") {
-      toast.error(error);
+      toast.error(authError);
     }
-  }, [signUpStatus, navigate, error]);
+  }, [signUpStatus, navigate, authError]);
 
   return (
     <div className="min-h-fit my-16 lg:my-12 flex justify-center max-w-7xl m-auto">

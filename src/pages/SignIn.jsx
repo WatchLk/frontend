@@ -8,6 +8,10 @@ import { LiaSpinnerSolid } from "react-icons/lia";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { resetSignInStatus, signInAsync } from "@/state/authSlice/authSlice";
+import {
+  resetSyncCartStatus,
+  syncCartAsync,
+} from "@/state/cartSlice/cartSlice";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,13 +23,19 @@ const SignIn = () => {
     password: "",
   });
   const dispatch = useDispatch();
-  const { signInStatus, error } = useSelector((state) => state.auth);
+  const { currentUser, token, signInStatus, authError } = useSelector(
+    (state) => state.auth
+  );
+  const { cart, syncCartStatus, cartError } = useSelector(
+    (state) => state.cart
+  );
 
   const navigate = useNavigate();
 
   useEffect(() => {
     return () => {
       dispatch(resetSignInStatus());
+      dispatch(resetSyncCartStatus());
     };
   }, []);
 
@@ -54,11 +64,23 @@ const SignIn = () => {
   useEffect(() => {
     if (signInStatus === "fulfilled") {
       toast.success("Login successful");
-      navigate("/");
+      if (cart.length > 0) {
+        dispatch(syncCartAsync({ cart, userId: currentUser.userId, token }));
+      } else {
+        navigate("/");
+      }
     } else if (signInStatus === "rejected") {
-      toast.error(error);
+      toast.error(authError);
     }
-  }, [signInStatus, navigate, error]);
+  }, [signInStatus, navigate, authError, currentUser]);
+
+  useEffect(() => {
+    if (syncCartStatus === "fulfilled") {
+      navigate("/");
+    } else if (syncCartStatus === "rejected") {
+      toast.error(cartError);
+    }
+  }, [syncCartStatus]);
 
   return (
     <div className="min-h-fit my-16 lg:my-12 flex justify-center max-w-7xl m-auto">

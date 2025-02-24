@@ -1,13 +1,36 @@
-import { products } from "@/resources/products";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import ProductCard from "./ProductCard";
 import { Button } from "@/components/ui/button";
+import { useDispatch, useSelector } from "react-redux";
+import { getProductsAsync } from "@/state/productSlice/productSlice";
+import toast from "react-hot-toast";
+import { resetAddToCartStatus } from "@/state/cartSlice/cartSlice";
 
 const ProductsSection = () => {
-  const [list, setList] = useState([]);
+  const { products, productError } = useSelector((state) => state.product);
+  const { cartError, addToCartStatus } = useSelector((state) => state.cart);
+
+  const dispatch = useDispatch();
   useEffect(() => {
-    setList(products.slice(0,10));
+    if (products.length === 0) {
+      dispatch(getProductsAsync());
+      if (productError) {
+        toast.error(productError);
+      }
+    }
   }, []);
+  useEffect(() => {
+    if (addToCartStatus === "fulfilled") {
+      toast.success("Item added to cart");
+    } else if (addToCartStatus === "rejected") {
+      toast.error(cartError);
+    }
+  }, [addToCartStatus]);
+
+  useEffect(() => {
+    dispatch(resetAddToCartStatus());
+  }, [addToCartStatus]);
+
   return (
     <div className="max-w-7xl m-auto mt-8 md:mt-20">
       <div className="flex flex-col items-center gap-12 md:px-6 lg:px-10">
@@ -15,8 +38,8 @@ const ProductsSection = () => {
           Our Most Popular Models
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 grid-flow-row w-full gap-4 md:gap-6">
-          {list.length > 0 &&
-            list.map((product, index) => {
+          {products.length > 0 &&
+            products.map((product, index) => {
               return <ProductCard key={index} product={product} />;
             })}
         </div>

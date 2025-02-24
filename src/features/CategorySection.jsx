@@ -28,7 +28,7 @@ const CategorySection = () => {
           return (
             <Link
               key={index}
-              className={`relative rounded-4xl flex overflow-hidden group
+              className={`relative rounded-4xl flex overflow-hidden group min-h-[12rem]
                 ${
                   index === 0
                     ? "md:col-span-1 md:row-span-1 lg:col-span-2 lg:row-span-2"

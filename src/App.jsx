@@ -7,6 +7,7 @@ import SignUp from "./pages/SignUp";
 import { Toaster } from "react-hot-toast";
 
 function App() {
+
   return (
     <BrowserRouter>
       <Header />

@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { signIn, signUp } from "./authApis";
+import { signIn, signUp } from "./authApi";
 
 const initialState = {
   currentUser: null,
   token: null,
   signInStatus: "idle",
   signUpStatus: "idle",
-  error: null,
+  authError: null,
 };
 
 export const signInAsync = createAsyncThunk(
@@ -31,46 +31,46 @@ const authSlice = createSlice({
       state.currentUser = null;
       state.token = null;
       state.loading = false;
-      state.error = null;
+      state.authError = null;
     },
     resetSignInStatus: (state) => {
       state.signInStatus = "idle";
-      state.error = null;
+      state.authError = null;
     },
     resetSignUpStatus: (state) => {
       state.signUpStatus = "idle";
-      state.error = null;
+      state.authError = null;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(signInAsync.pending, (state) => {
         state.signInStatus = "pending";
-        state.error = null;
+        state.authError = null;
       })
       .addCase(signInAsync.fulfilled, (state, action) => {
         state.signInStatus = "fulfilled";
         state.currentUser = action.payload.user;
         state.token = action.payload.token;
-        state.error = null;
+        state.authError = null;
       })
       .addCase(signInAsync.rejected, (state, action) => {
         state.signInStatus = "rejected";
-        state.error = action.error.message;
+        state.authError = action.error.message;
         state.currentUser = null;
         state.token = null;
       })
       .addCase(signUpAsync.pending, (state) => {
         state.signUpStatus = "pending";
-        state.error = null;
+        state.authError = null;
       })
       .addCase(signUpAsync.fulfilled, (state) => {
         state.signUpStatus = "fulfilled";
-        state.error = null;
+        state.authError = null;
       })
       .addCase(signUpAsync.rejected, (state, action) => {
         state.signUpStatus = "rejected";
-        state.error = action.error.message;
+        state.authError = action.error.message;
         state.currentUser = null;
         state.token = null;
       });

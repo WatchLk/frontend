@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
 import { Button } from "@/components/ui/button";
 import { products } from "@/resources/products";
+import { getProducts } from "@/state/productSlice/productApi";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { LuSearch } from "react-icons/lu";
 
 const SearchBar = ({ setResult, setLoading, setValue }) => {
@@ -15,18 +17,26 @@ const SearchBar = ({ setResult, setLoading, setValue }) => {
     [searchValue, setValue]
   );
 
-  const getResult = () => {
+  const fetchResult = async (key) => {
+    return await getProducts(key);
+  };
+  const getResult = async () => {
     setLoading(true);
     if (searchValue.trim() === "") {
       setLoading(false);
       return setResult([]);
     }
-    const res = products.filter((product) =>
-      product.name.toLocaleLowerCase().includes(searchValue.trim())
-    );
-
-    setLoading(false);
-    setResult(res);
+    try {
+      const searchResult = await fetchResult(searchValue.trim());
+      const res = searchResult.filter((product) =>
+        product.name.toLocaleLowerCase().includes(searchValue.trim())
+      );
+      setLoading(false);
+      setResult(res);
+    } catch (error) {
+      setLoading(false);
+      toast.error(error.message);
+    }
   };
 
   return (

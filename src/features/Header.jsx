@@ -4,7 +4,6 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import SearchBar from "./SearchBar";
@@ -13,9 +12,9 @@ import { ChevronDown } from "lucide-react";
 import SearchResultSection from "./SearchResultSection";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "@/state/authSlice/authSlice";
+import { resetCart } from "@/state/cartSlice/cartSlice";
 
 const Header = () => {
   const [value, setValue] = useState("");
@@ -23,12 +22,14 @@ const Header = () => {
   const [loading, setLoading] = useState(false);
 
   const { currentUser } = useSelector((state) => state.auth);
+  const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const ref = useRef(null);
 
   const handleSignOut = () => {
     ref.current.click();
     dispatch(signOut());
+    dispatch(resetCart());
   };
 
   return (
@@ -50,29 +51,32 @@ const Header = () => {
           />
         </div>
         <div className="flex items-center gap-4">
-          <div>
+          <div className="relative cursor-pointer">
             <LiaShoppingBagSolid size={24} />
+            {cart.length > 0 && (
+              <span
+                className="absolute bg-red-500 p-1.5 text-[0.65rem] font-medium text-white rounded-full top-[-50%] right-[-50%]"
+                style={{ lineHeight: 0.5 }}
+              >
+                {cart.length}
+              </span>
+            )}
           </div>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger className="cursor-pointer" ref={ref}>
-              <div className="flex items-center gap-2">
-                <LiaUser size={24} />
-                {currentUser && (
+          {currentUser && (
+            <DropdownMenu>
+              <DropdownMenuTrigger className="cursor-pointer" ref={ref}>
+                <div className="flex items-center gap-2">
+                  <LiaUser size={24} />
                   <div className="hidden md:flex flex-col text-start">
                     <span className="text-xs">Hello,</span>
                     <span className="font-medium">
                       {currentUser.firstName + " " + currentUser.lastName}
                     </span>
                   </div>
-                )}
-                {currentUser && <ChevronDown size={16} />}
-                {currentUser === null && (
-                  <Link to={"/auth/signin"}>Sign In</Link>
-                )}
-              </div>
-            </DropdownMenuTrigger>
-            {currentUser && (
+                  <ChevronDown size={16} />
+                </div>
+              </DropdownMenuTrigger>
               <DropdownMenuContent className="w-48 divide-y-[1px] divide-accent space-y-1">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuGroup className="pb-1">
@@ -84,8 +88,9 @@ const Header = () => {
                   Log out
                 </DropdownMenuItem>
               </DropdownMenuContent>
-            )}
-          </DropdownMenu>
+            </DropdownMenu>
+          )}
+          {currentUser === null && <Link to={"/auth/signin"}>Sign In</Link>}
         </div>
       </div>
       <div className="relative block mx-10 md:hidden">
