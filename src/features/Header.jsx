@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import SearchBar from "./SearchBar";
-import { LiaShoppingBagSolid, LiaUser } from "react-icons/lia";
+import { LiaUser } from "react-icons/lia";
 import { ChevronDown } from "lucide-react";
 import SearchResultSection from "./SearchResultSection";
 import { useRef, useState } from "react";
@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "@/state/authSlice/authSlice";
 import { resetCart } from "@/state/cartSlice/cartSlice";
+import Cart from "./Cart";
 
 const Header = () => {
   const [value, setValue] = useState("");
@@ -22,7 +23,7 @@ const Header = () => {
   const [loading, setLoading] = useState(false);
 
   const { currentUser } = useSelector((state) => state.auth);
-  const { cart } = useSelector((state) => state.cart);
+
   const dispatch = useDispatch();
   const ref = useRef(null);
 
@@ -51,16 +52,8 @@ const Header = () => {
           />
         </div>
         <div className="flex items-center gap-4">
-          <div className="relative cursor-pointer">
-            <LiaShoppingBagSolid size={24} />
-            {cart.length > 0 && (
-              <span
-                className="absolute bg-red-500 p-1.5 text-[0.65rem] font-medium text-white rounded-full top-[-50%] right-[-50%]"
-                style={{ lineHeight: 0.5 }}
-              >
-                {cart.length}
-              </span>
-            )}
+          <div>
+            <Cart />
           </div>
 
           {currentUser && (

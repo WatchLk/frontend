@@ -39,3 +39,22 @@ export const signUp = async (signupData) => {
     throw error.message;
   }
 };
+
+export const signInWithGoogle = async (token) => {
+  try {
+    const res = await fetch(`${baseUrl}/api/Auth/google`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(token),
+    });
+    const data = await res.json();
+    if (!data.succeeded) {
+      throw new Error(data.errors[0]);
+    }
+    return data;
+  } catch (error) {
+    throw new Error(error.message || "An unknown error occurred");
+  }
+};

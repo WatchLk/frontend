@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { signIn, signUp } from "./authApi";
+import { signIn, signInWithGoogle, signUp } from "./authApi";
 
 const initialState = {
   currentUser: null,
@@ -20,6 +20,13 @@ export const signUpAsync = createAsyncThunk(
   "auth/signUpAsync",
   async (registerData) => {
     return await signUp(registerData);
+  }
+);
+
+export const signInWithGoogleAsync = createAsyncThunk(
+  "auth/signInWithGoogleAsync",
+  async (token) => {
+    return await signInWithGoogle(token);
   }
 );
 
@@ -73,6 +80,16 @@ const authSlice = createSlice({
         state.authError = action.error.message;
         state.currentUser = null;
         state.token = null;
+      })
+      .addCase(signInWithGoogleAsync.pending, (state) => {
+        state.signInStatus = "pending";
+        state.authError = null;
+      })
+      .addCase(signInWithGoogleAsync.fulfilled, (state, action) => {
+        state.signInStatus = "fulfilled";
+        state.currentUser = action.payload.user;
+        state.token = action.payload.token;
+        state.authError = null;
       });
   },
 });

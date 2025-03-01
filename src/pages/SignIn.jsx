@@ -3,7 +3,6 @@ import { validateEmail } from "@/lib/validators";
 import { Eye, EyeClosed } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { FcGoogle } from "react-icons/fc";
 import { LiaSpinnerSolid } from "react-icons/lia";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +11,7 @@ import {
   resetSyncCartStatus,
   syncCartAsync,
 } from "@/state/cartSlice/cartSlice";
+import OAuthButton from "@/features/OAuthButton";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -31,6 +31,13 @@ const SignIn = () => {
   );
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -181,13 +188,7 @@ const SignIn = () => {
           <span>Or</span>
           <hr className="grow" />
         </div>
-        <Button
-          variant="outline"
-          className="!p-6 border shadow-none rounded-full"
-        >
-          <FcGoogle />
-          Continue with Google
-        </Button>
+        <OAuthButton />
         <div className="flex gap-1 justify-center">
           <span className="text-gray-600">Don&#39;t have an account?</span>
           <Link to={"/auth/signup"} className="underline">

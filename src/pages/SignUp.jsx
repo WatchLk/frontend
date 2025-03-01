@@ -6,12 +6,17 @@ import {
 } from "@/lib/validators";
 import { Eye, EyeClosed } from "lucide-react";
 import { useEffect, useState } from "react";
-import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import { LiaSpinnerSolid } from "react-icons/lia";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { resetSignUpStatus, signUpAsync } from "@/state/authSlice/authSlice";
+import {
+  resetSignInStatus,
+  resetSignUpStatus,
+  signUpAsync,
+} from "@/state/authSlice/authSlice";
+import OAuthButton from "@/features/OAuthButton";
+import { syncCartAsync } from "@/state/cartSlice/cartSlice";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [firstnameError, setFirstnameError] = useState(null);
@@ -26,14 +31,26 @@ const SignUp = () => {
     password: "",
   });
 
-  const { signUpStatus, authError } = useSelector((state) => state.auth);
+  const { signUpStatus, authError, signInStatus, currentUser, token } =
+    useSelector((state) => state.auth);
+  const { cart, cartError, syncCartStatus } = useSelector(
+    (state) => state.cart
+  );
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
+  }, []);
+
+  useEffect(() => {
     return () => {
       dispatch(resetSignUpStatus());
+      dispatch(resetSignInStatus());
     };
   }, []);
 
@@ -69,6 +86,27 @@ const SignUp = () => {
       toast.error(authError);
     }
   }, [signUpStatus, navigate, authError]);
+
+  useEffect(() => {
+    if (signInStatus === "fulfilled") {
+      toast.success("Login successful");
+      if (cart.length > 0) {
+        dispatch(syncCartAsync({ cart, userId: currentUser.userId, token }));
+      } else {
+        navigate("/");
+      }
+    } else if (signInStatus === "rejected") {
+      toast.error(authError);
+    }
+  }, [signInStatus, navigate, authError, currentUser]);
+
+  useEffect(() => {
+    if (syncCartStatus === "fulfilled") {
+      navigate("/");
+    } else if (syncCartStatus === "rejected") {
+      toast.error(cartError);
+    }
+  }, [syncCartStatus]);
 
   return (
     <div className="min-h-fit my-16 lg:my-12 flex justify-center max-w-7xl m-auto">
@@ -220,13 +258,7 @@ const SignUp = () => {
           <span>Or</span>
           <hr className="grow" />
         </div>
-        <Button
-          variant="outline"
-          className="!p-6 border shadow-none rounded-full"
-        >
-          <FcGoogle />
-          Continue with Google
-        </Button>
+        <OAuthButton />
         <div className="flex gap-1 justify-center">
           <span className="text-gray-600">Already have an account?</span>
           <Link to={"/auth/signin"} className="underline">

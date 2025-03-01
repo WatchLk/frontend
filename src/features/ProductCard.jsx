@@ -55,10 +55,10 @@ const ProductCard = ({ product }) => {
       <div className="flex flex-col px-2">
         <span className="text-sm font-medium">{product.brand.name}</span>
         <h4 className="font-medium text-lg">{product.name}</h4>
-        <span className="text-sm font-medium text-gray-600">
+        <span className="text-sm font-medium text-slate-600">
           {product.category.name}
         </span>
-        <p className="my-1 line-clamp-2 text-[0.95rem] text-gray-600">
+        <p className="my-1 line-clamp-2 text-[0.95rem] text-slate-600">
           {product.description}
         </p>
         <span className="font-medium text-lg">${product.price}</span>
